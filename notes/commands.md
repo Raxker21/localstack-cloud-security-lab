@@ -81,3 +81,38 @@ OK checks: 1
 ERROR checks: 0
 ```
 
+## S3 encryption configuration
+
+### Checked bucket encryption
+
+```bash
+aws s3api get-bucket-encryption --bucket company-public-files --profile localstack
+aws s3api get-bucket-encryption --bucket internal-security-logs --profile localstack
+```
+
+### Created encryption configuration
+
+```bash
+notepad s3-encryption-config.json
+```
+
+### Enabled enryption for internal security logs bucket
+
+```bash
+aws s3api put-bucket-encryption --bucket internal-security-logs --server-side-encryption-configuration file://s3-encryption-config.json --profile localstack
+```
+
+### Verified encryption 
+
+```bash
+aws s3api get-bucket-encryption --bucket internal-security-logs --profile localstack
+```
+
+## Recreate LocalStack lab state
+
+If LocalStack state is reset, the lab can be recreated using:
+
+```bash
+powershell -ExecutionPolicy Bypass -File .\setup_lab.ps1
+```
+This script creates the S3 buckets, uploads test files, applies the public read bucket policy and enables default encryption for the internal security logs bucket.
